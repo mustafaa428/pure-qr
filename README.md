@@ -50,11 +50,8 @@ Most commercial QR generators trick users into an expensive trap:
 
 ## 🚀 Canlı Önizleme / Live Demo
 
-Kendi tarayıcınızda deneyin / *Try it in your browser:* 👉 **[https://YOUR_USERNAME.github.io/pure-qr](https://YOUR_USERNAME.github.io/pure-qr)**
+Kendi tarayıcınızda deneyin / *Try it in your browser:* 👉 **[https://mustafaa428.github.io/pure-qr](https://mustafaa428.github.io/pure-qr)**
 
-*(GitHub Pages'i aktif ettikten sonra `YOUR_USERNAME` kısmını kendi kullanıcı adınızla değiştirin.)* *(Replace `YOUR_USERNAME` with your actual GitHub username after enabling Pages.)*
-
----
 
 ## 💻 Kurulum / Setup
 
