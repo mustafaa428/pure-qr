@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZeroQR Studio — Özgür & Modern QR Oluşturucu</title>
+  <title>ZeroQR Studio — Renkli & Açık Glassmorphism QR Oluşturucu</title>
   <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090d16;
-      --card-bg: rgba(22, 30, 49, 0.7);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #38bdf8;
-      --primary-hover: #0ea5e9;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --glass-panel: rgba(255, 255, 255, 0.72);
+      --glass-surface: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.6);
       --danger: #ef4444;
-      --danger-hover: #dc2626;
+      --card-radius: 28px;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -29,52 +30,78 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Açık, Canlı ve Renkli Aurora Arka Planı */
     body {
-      background-color: var(--bg);
+      background-color: #f1f5f9;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.35) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(244, 114, 182, 0.35) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(167, 139, 250, 0.35) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(251, 191, 36, 0.25) 0px, transparent 50%);
+      background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
+      position: relative;
+    }
+
+    /* Arka Plan Ambient Işık Halkaları */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    body::before {
+      top: -100px;
+      left: -100px;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+    }
+    body::after {
+      bottom: -100px;
+      right: -100px;
+      background: linear-gradient(135deg, #f472b6, #fb923c);
     }
 
     .container {
       width: 100%;
-      max-width: 950px;
+      max-width: 1080px;
       display: grid;
-      grid-template-columns: 1fr 300px; /* Sağ taraf sabit 300px, sol esnek */
-      gap: 2.5rem;
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 3rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    @media (max-width: 850px) {
-      .container {
-        grid-template-columns: 1fr;
-        padding: 2rem;
-      }
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 360px);
+      gap: 2.2rem;
+      background: var(--glass-panel);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1.5px solid var(--glass-border);
+      border-radius: var(--card-radius);
+      padding: 2.5rem;
+      box-shadow: var(--glass-shadow);
+      overflow: hidden;
     }
 
     .header-group {
       grid-column: 1 / -1;
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     .header-group h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      background: linear-gradient(to right, #38bdf8, #818cf8);
+      background: linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #ec4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -1px;
@@ -83,62 +110,89 @@
     .header-group p {
       color: var(--text-muted);
       font-size: 1rem;
-      margin-top: 0.5rem;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      font-weight: 500;
+      margin-top: 0.4rem;
     }
 
     .form-panel {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.2rem;
+      min-width: 0;
+    }
+
+    .glass-section {
+      background: var(--glass-surface);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      min-width: 0;
+    }
+
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
     }
 
     .field-group {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
+      min-width: 0;
     }
 
     label {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      color: #475569;
+      letter-spacing: 0.03em;
     }
 
     input[type="text"], select {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(203, 213, 225, 0.8);
       border-radius: 12px;
-      padding: 0.9rem 1.2rem;
+      padding: 0.85rem 1rem;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.25s ease;
+      min-width: 0;
     }
 
     input[type="text"]:focus, select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      background: #ffffff;
     }
 
-    .color-grid {
+    .grid-2col {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
     }
 
     .color-input-wrapper {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
+      gap: 0.65rem;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(203, 213, 225, 0.8);
       border-radius: 12px;
-      padding: 0.6rem 1rem;
+      padding: 0.45rem 0.75rem;
+      min-width: 0;
     }
 
     input[type="color"] {
@@ -149,45 +203,47 @@
       background: transparent;
       cursor: pointer;
       padding: 0;
+      flex-shrink: 0;
     }
     input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-    input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+    input[type="color"]::-webkit-color-swatch { border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; }
 
-    /* YENİ: Logo Yükleme Alanı */
+    /* Logo Yükleme Alanı */
     .logo-upload-area {
       position: relative;
-      border: 2px dashed var(--border);
+      border: 2px dashed rgba(148, 163, 184, 0.7);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 1.3rem;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s;
-      background: rgba(15, 23, 42, 0.4);
+      transition: all 0.25s;
+      background: rgba(255, 255, 255, 0.4);
+      width: 100%;
     }
 
     .logo-upload-area:hover, .logo-upload-area.drag-over {
       border-color: var(--primary);
-      background: rgba(56, 189, 248, 0.05);
+      background: rgba(99, 102, 241, 0.08);
     }
 
     .upload-prompt {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.45rem;
       color: var(--text-muted);
     }
 
     .upload-prompt svg {
-      width: 40px;
-      height: 40px;
-      stroke: var(--text-muted);
-      transition: stroke 0.2s;
+      width: 32px;
+      height: 32px;
+      stroke: var(--primary);
+      transition: transform 0.2s;
     }
-    .logo-upload-area:hover .upload-prompt svg { stroke: var(--primary); }
+    .logo-upload-area:hover .upload-prompt svg { transform: translateY(-2px); }
 
-    .upload-text { font-size: 0.9rem; font-weight: 500; }
-    .upload-subtext { font-size: 0.8rem; opacity: 0.7; }
+    .upload-text { font-size: 0.88rem; font-weight: 600; color: #334155; }
+    .upload-subtext { font-size: 0.76rem; color: #64748b; }
 
     #logo-input {
       position: absolute;
@@ -199,77 +255,129 @@
       cursor: pointer;
     }
 
-    /* YENİ: Logo Önizleme ve Kaldırma */
     .logo-preview-wrapper {
-      display: none; /* Varsayılan gizli */
+      display: none;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
+      gap: 0.8rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(203, 213, 225, 0.8);
+      border-radius: 14px;
+      padding: 0.65rem 0.9rem;
+      min-width: 0;
     }
 
     .logo-preview-wrapper.active { display: flex; }
-
-    .logo-meta { display: flex; align-items: center; gap: 0.75rem; }
+    .logo-meta { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
     #logo-preview-img {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 8px;
       object-fit: contain;
-      background: #fff; /* Şeffaf logolar görünsün diye */
+      background: #f8fafc;
       padding: 2px;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
     }
     #logo-name {
       font-size: 0.85rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text);
-      max-width: 150px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: 140px;
     }
 
     .btn-remove-logo {
       background: rgba(239, 68, 68, 0.1);
       color: var(--danger);
-      border: 1px solid rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .btn-remove-logo:hover {
       background: var(--danger);
       color: #fff;
     }
 
-    /* Sağ Panel - Önizleme */
+    /* Sağ Önizleme Paneli */
     .preview-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2rem;
+      gap: 1.5rem;
       position: sticky;
       top: 2rem;
       height: fit-content;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .qr-card-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid #ffffff;
+      padding: 1.4rem;
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.8);
+      width: 100%;
+      max-width: 330px;
+      overflow: hidden;
     }
 
     .qr-wrapper {
       background: #ffffff;
-      padding: 1.25rem;
-      border-radius: 20px;
+      padding: 0.9rem;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
       width: 100%;
-      max-width: 280px;
+      max-width: 275px;
       aspect-ratio: 1;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    #qr-canvas {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qr-canvas svg {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      display: block;
+      object-fit: contain;
+    }
+
+    #qr-caption-display {
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      width: 100%;
+      padding: 0 0.5rem;
+      min-height: 1.2em;
     }
 
     .actions {
@@ -277,37 +385,78 @@
       flex-direction: column;
       gap: 0.75rem;
       width: 100%;
-      max-width: 280px;
+      max-width: 330px;
     }
 
     .btn-download {
       width: 100%;
-      padding: 1rem;
-      border-radius: 12px;
+      padding: 0.95rem;
+      border-radius: 14px;
       border: none;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
       transition: all 0.2s;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-main {
-      background: var(--primary);
-      color: #090d16;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
     }
     .btn-main:hover {
-      background: var(--primary-hover);
       transform: translateY(-2px);
+      box-shadow: 0 14px 26px -5px rgba(79, 70, 229, 0.55);
     }
 
     .btn-sub {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.8);
+      color: #334155;
+      border: 1.5px solid rgba(203, 213, 225, 0.8);
     }
     .btn-sub:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: #ffffff;
+      transform: translateY(-2px);
+      border-color: #94a3b8;
+    }
+
+    /* Mobil Uyum Kuralları */
+    @media (max-width: 860px) {
+      body {
+        padding: 1.2rem 0.6rem;
+      }
+      .container {
+        grid-template-columns: 1fr;
+        padding: 1.6rem 1.2rem;
+        gap: 2rem;
+        border-radius: 22px;
+      }
+      .preview-panel {
+        position: static;
+        width: 100%;
+      }
+      .qr-card-container, .actions {
+        max-width: 100%;
+      }
+      .qr-wrapper {
+        max-width: 260px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-group h1 {
+        font-size: 1.8rem;
+      }
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+      .qr-wrapper {
+        max-width: 230px;
+      }
     }
   </style>
 </head>
@@ -316,121 +465,179 @@
   <div class="container">
     <div class="header-group">
       <h1>ZeroQR Studio</h1>
-      <p>Sunucusuz, aboneliksiz, marka logolu vektörel QR oluşturucu.</p>
     </div>
 
-    <!-- Ayar Paneli (Sol) -->
+    <!-- Sol Panel -->
     <div class="form-panel">
-      <div class="field-group">
-        <label for="qr-data">İçerik (URL veya Metin)</label>
-        <input type="text" id="qr-data" value="https://github.com" placeholder="https://...">
-      </div>
-
-      <div class="color-grid">
+      
+      <!-- Konsept Seçimi -->
+      <div class="glass-section">
+        <div class="section-title">✨ Özel Gün / Konsept Seçimi</div>
         <div class="field-group">
-          <label>Nokta Rengi</label>
-          <div class="color-input-wrapper">
-            <input type="color" id="dot-color" value="#0f172a">
-            <span style="font-size: 0.9rem; font-family: monospace;" id="dot-color-label">#0F172A</span>
-          </div>
-        </div>
-        <div class="field-group">
-          <label>Arka Plan</label>
-          <div class="color-input-wrapper">
-            <input type="color" id="bg-color" value="#ffffff">
-            <span style="font-size: 0.9rem; font-family: monospace;" id="bg-color-label">#FFFFFF</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
-        <div class="field-group">
-          <label for="dot-style">Nokta Deseni</label>
-          <select id="dot-style">
-            <option value="rounded">Yuvarlatılmış</option>
-            <option value="classy-rounded">Zarif Yuvarlak</option>
-            <option value="dots">Nokta (Dots)</option>
-            <option value="square">Klasik Kare</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <label for="corner-style">Köşe Deseni</label>
-          <select id="corner-style">
-            <option value="extra-rounded">Tam Oval</option>
-            <option value="rounded">Hafif Yuvarlak</option>
-            <option value="square">Keskin Kare</option>
+          <label for="theme-preset">Konsept</label>
+          <select id="theme-preset">
+            <option value="all">Tüm Desenler (Genel)</option>
+            <option value="valentine">💖 Sevgililer Günü (Kalp & Romantik)</option>
+            <option value="birthday">🎉 Doğum Günü & Parti (Dinamik)</option>
+            <option value="wedding">💍 Düğün & Nişan (Zarif & Elit)</option>
+            <option value="tech">⚡ Teknoloji & Kurumsal (Keskin)</option>
           </select>
         </div>
       </div>
 
-      <!-- YENİLENMİŞ: Logo Bölümü -->
-      <div class="field-group">
-        <label>Marka Logosu</label>
-        
-        <!-- Yükleme Alanı (Sürükle bırak + Tıkla) -->
+      <!-- İçerik -->
+      <div class="glass-section">
+        <div class="section-title">🔗 QR İçeriği</div>
+        <div class="field-group">
+          <label for="qr-data">URL veya Metin</label>
+          <input type="text" id="qr-data" value="https://github.com" placeholder="https://...">
+        </div>
+      </div>
+
+      <!-- Geometri & Desenler -->
+      <div class="glass-section">
+        <div class="section-title">📐 Geometri & Desen Seçenekleri</div>
+        <div class="grid-2col">
+          <div class="field-group">
+            <label for="dot-style">Nokta Deseni</label>
+            <select id="dot-style"></select>
+          </div>
+          <div class="field-group">
+            <label for="corner-style">Köşe Deseni</label>
+            <select id="corner-style"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- QR Altı Metin -->
+      <div class="glass-section">
+        <div class="section-title">✍️ QR Altı Metni</div>
+        <div class="field-group">
+          <label for="qr-caption-input">Etiket / Mesaj</label>
+          <input type="text" id="qr-caption-input" placeholder="Örn: Masayı Okutunuz / Seni Seviyorum!">
+        </div>
+        <div class="grid-2col">
+          <div class="field-group">
+            <label for="caption-font-size">Yazı Boyutu</label>
+            <select id="caption-font-size">
+              <option value="13px">Küçük (13px)</option>
+              <option value="16px" selected>Orta (16px)</option>
+              <option value="20px">Büyük (20px)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Metin Rengi</label>
+            <div class="color-input-wrapper">
+              <input type="color" id="caption-color" value="#0f172a">
+              <span style="font-size: 0.85rem; font-family: monospace;" id="caption-color-label">#0F172A</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Renk Ayarları -->
+      <div class="glass-section">
+        <div class="section-title">🎨 Renk Tercihleri</div>
+        <div class="grid-2col">
+          <div class="field-group">
+            <label>Nokta Rengi</label>
+            <div class="color-input-wrapper">
+              <input type="color" id="dot-color" value="#0f172a">
+              <span style="font-size: 0.85rem; font-family: monospace;" id="dot-color-label">#0F172A</span>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Arka Plan</label>
+            <div class="color-input-wrapper">
+              <input type="color" id="bg-color" value="#ffffff">
+              <span style="font-size: 0.85rem; font-family: monospace;" id="bg-color-label">#FFFFFF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo Yükleme -->
+      <div class="glass-section">
+        <div class="section-title">🖼️ Logo / Görsel</div>
         <div class="logo-upload-area" id="logo-drop-zone">
           <input type="file" id="logo-input" accept="image/png, image/jpeg, image/svg+xml">
           <div class="upload-prompt">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 16V8M12 8L9 11M12 8L15 11" />
               <path d="M19.33 11C19.86 11.49 20.21 12.11 20.31 12.8C20.4 13.48 20.25 14.18 19.88 14.77C19.51 15.36 18.94 15.8 18.28 16M18.28 16C17.62 16.2 16.92 16.14 16.31 15.82C15.7 15.5 15.22 14.96 14.93 14.3M18.28 16V18C18.28 19.1 17.38 20 16.28 20H7.72C6.62 20 5.72 19.1 5.72 18V16M5.72 16C5.06 15.8 4.49 15.36 4.12 14.77C3.75 14.18 3.6 13.48 3.69 12.8C3.79 12.11 4.14 11.49 4.67 11" />
             </svg>
-            <span class="upload-text">Logoyu buraya sürükleyin veya tıklayın</span>
-            <span class="upload-subtext">PNG, JPG, SVG (Maks. 500KB önerilir)</span>
+            <span class="upload-text">Logoyu buraya sürükleyin veya seçin</span>
+            <span class="upload-subtext">PNG, JPG, SVG (Maks. 500KB)</span>
           </div>
         </div>
 
-        <!-- Önizleme ve Kaldırma Barı (Varsayılan gizli) -->
         <div class="logo-preview-wrapper" id="logo-preview-bar">
           <div class="logo-meta">
-            <img src="" id="logo-preview-img" alt="Logo Önizleme">
+            <img src="" id="logo-preview-img" alt="Logo">
             <span id="logo-name">logo.png</span>
           </div>
-          <button class="btn-remove-logo" id="btn-remove-logo" type="button">Logoyu Kaldır</button>
+          <button class="btn-remove-logo" id="btn-remove-logo" type="button">Kaldır</button>
         </div>
       </div>
+
     </div>
 
-    <!-- Önizleme Paneli (Sağ) -->
+    <!-- Sağ Panel: Önizleme -->
     <div class="preview-panel">
-      <div class="qr-wrapper">
-        <div id="qr-canvas"></div>
+      <div class="qr-card-container">
+        <div class="qr-wrapper" id="qr-box">
+          <div id="qr-canvas"></div>
+        </div>
+        <div id="qr-caption-display"></div>
       </div>
 
       <div class="actions">
-        <button class="btn-download btn-main" onclick="downloadQR('png')">PNG Olarak İndir (Web)</button>
-        <button class="btn-download btn-sub" onclick="downloadQR('svg')">SVG Olarak İndir (Baskı)</button>
+        <button class="btn-download btn-main" onclick="downloadQRWithText('png')">
+          <span>PNG Olarak İndir (Metinli)</span>
+        </button>
+        <button class="btn-download btn-sub" onclick="downloadQRWithText('svg')">
+          <span>SVG Olarak İndir (Vektörel)</span>
+        </button>
       </div>
     </div>
   </div>
 
   <script>
-    // QR Kodu Çekirdek Ayarları
+    // QR Kütüphanesi - Yüksek hata düzeltme seviyesi (H: %30 kayba kadar tolerans)
     const qrCode = new QRCodeStyling({
       width: 250,
       height: 250,
-      type: "svg", // Vektörel çizim
+      type: "svg",
       data: "https://github.com",
+      qrOptions: {
+        errorCorrectionLevel: "H" // Kalp ve desen modifikasyonlarında kameraların okuyabilmesi için H seviyesi şarttır
+      },
       dotsOptions: { color: "#0f172a", type: "rounded" },
       cornersSquareOptions: { type: "extra-rounded" },
       backgroundOptions: { color: "#ffffff" },
       imageOptions: {
         crossOrigin: "anonymous",
-        margin: 5, // Logonun etrafındaki temiz alan
-        imageSize: 0.35 // Logonun QR içindeki büyüklük oranı
+        margin: 5,
+        imageSize: 0.35
       }
     });
 
-    qrCode.append(document.getElementById("qr-canvas"));
+    const qrContainer = document.getElementById("qr-canvas");
+    qrCode.append(qrContainer);
 
     // DOM Elementleri
     const inputData = document.getElementById("qr-data");
     const inputDotColor = document.getElementById("dot-color");
     const inputBgColor = document.getElementById("bg-color");
+    const selectTheme = document.getElementById("theme-preset");
     const selectDotStyle = document.getElementById("dot-style");
     const selectCornerStyle = document.getElementById("corner-style");
     
-    // Logo Elementleri
+    const inputCaption = document.getElementById("qr-caption-input");
+    const selectCaptionSize = document.getElementById("caption-font-size");
+    const inputCaptionColor = document.getElementById("caption-color");
+    const captionDisplay = document.getElementById("qr-caption-display");
+
     const logoInput = document.getElementById("logo-input");
     const logoDropZone = document.getElementById("logo-drop-zone");
     const logoPreviewBar = document.getElementById("logo-preview-bar");
@@ -438,87 +645,306 @@
     const logoNameSpan = document.getElementById("logo-name");
     const btnRemoveLogo = document.getElementById("btn-remove-logo");
 
-    // Canlı Güncelleme Fonksiyonları
-    inputData.addEventListener("input", (e) => qrCode.update({ data: e.target.value || " " }));
-    
+    // Konsept Geometrileri
+    const conceptStyles = {
+      all: {
+        dots: [
+          { value: "square", label: "Klasik Kare" },
+          { value: "rounded", label: "Yuvarlatılmış" },
+          { value: "dots", label: "Nokta (Dots)" },
+          { value: "classy", label: "Zarif (Classy)" },
+          { value: "classy-rounded", label: "Zarif Yuvarlak" }
+        ],
+        corners: [
+          { value: "square", label: "Klasik Kare" },
+          { value: "rounded", label: "Hafif Yuvarlak" },
+          { value: "extra-rounded", label: "Tam Oval" },
+          { value: "dot", label: "Nokta Köşe" }
+        ]
+      },
+      valentine: {
+        dots: [
+          { value: "heart", label: "💖 Kalp Deseni (Taranabilir)" },
+          { value: "rounded", label: "Romantik Oval" },
+          { value: "dots", label: "Aşk Damlaları (Dots)" },
+          { value: "square", label: "Klasik Kare" }
+        ],
+        corners: [
+          { value: "extra-rounded", label: "Tam Kalp Eğrisi (Oval)" },
+          { value: "rounded", label: "Yumuşak Köşe" },
+          { value: "square", label: "Klasik Kare" }
+        ]
+      },
+      birthday: {
+        dots: [
+          { value: "dots", label: "Konfeti Noktalar" },
+          { value: "rounded", label: "Balon Yuvarlaklar" },
+          { value: "square", label: "Klasik Kare" }
+        ],
+        corners: [
+          { value: "extra-rounded", label: "Balon Köşe (Oval)" },
+          { value: "dot", label: "Dairesel Köşe" },
+          { value: "square", label: "Klasik Kare" }
+        ]
+      },
+      wedding: {
+        dots: [
+          { value: "classy", label: "Asil & Elit (Classy)" },
+          { value: "classy-rounded", label: "Zarif Kavis" },
+          { value: "square", label: "Klasik Kare" }
+        ],
+        corners: [
+          { value: "rounded", label: "Kibar Yuvarlak" },
+          { value: "extra-rounded", label: "Yumuşak Oval" },
+          { value: "square", label: "Klasik Kare" }
+        ]
+      },
+      tech: {
+        dots: [
+          { value: "square", label: "Klasik Kare (Dijital Matris)" },
+          { value: "classy", label: "Köşeli Modern (Classy)" },
+          { value: "dots", label: "Piksel Noktalar" }
+        ],
+        corners: [
+          { value: "square", label: "Klasik Kare (Keskin Çerçeve)" },
+          { value: "dot", label: "Teknoloji Odaklı (Dot)" }
+        ]
+      }
+    };
+
+    function makeSvgResponsive() {
+      const svg = qrContainer.querySelector("svg");
+      if (!svg) return;
+      const w = svg.getAttribute("width") || "250";
+      const h = svg.getAttribute("height") || "250";
+      
+      if (!svg.getAttribute("viewBox")) {
+        svg.setAttribute("viewBox", `0 0 ${parseFloat(w)} ${parseFloat(h)}`);
+      }
+      svg.removeAttribute("width");
+      svg.removeAttribute("height");
+      svg.style.width = "100%";
+      svg.style.height = "100%";
+      svg.style.display = "block";
+    }
+
+    // Taranabilir Kalp Deseni Enjektörü (Finder Pattern ve Separator güvenliğiyle)
+    function applyScannableHeartEffect() {
+      if (selectDotStyle.value !== "heart") return;
+      const svg = qrContainer.querySelector("svg");
+      if (!svg) return;
+
+      const viewBox = svg.viewBox.baseVal;
+      const svgWidth = viewBox && viewBox.width ? viewBox.width : 250;
+      const svgHeight = viewBox && viewBox.height ? viewBox.height : 250;
+
+      // 3 ana köşe gözünün (Finder Patterns) ve ayırıcılarının bulunduğu kritik yasaklı bölgeler
+      const cornerEyeSize = svgWidth * 0.30;
+      const isForbiddenZone = (x, y) => {
+        const inTopLeft = (x <= cornerEyeSize && y <= cornerEyeSize);
+        const inTopRight = (x >= svgWidth - cornerEyeSize && y <= cornerEyeSize);
+        const inBottomLeft = (x <= cornerEyeSize && y >= svgHeight - cornerEyeSize);
+        return inTopLeft || inTopRight || inBottomLeft;
+      };
+
+      const circles = svg.querySelectorAll("circle");
+      circles.forEach(circle => {
+        const cx = parseFloat(circle.getAttribute("cx"));
+        const cy = parseFloat(circle.getAttribute("cy"));
+        const r = parseFloat(circle.getAttribute("r"));
+        const fill = circle.getAttribute("fill") || inputDotColor.value;
+
+        // Köşe gözlerine dokunulmaz (kameraların QR'ı bulması için şart)
+        if (r > 12 || isForbiddenZone(cx, cy)) return;
+
+        // Okunabilirliği garanti eden yüksek doluluklu (full-fill) kalp eğrisi
+        const s = r * 2.15;
+        const ox = cx - s / 2;
+        const oy = cy - s / 2;
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const d = `M ${ox + s * 0.5} ${oy + s * 0.88}
+                   C ${ox + s * 0.05} ${oy + s * 0.58}, ${ox - s * 0.05} ${oy + s * 0.18}, ${ox + s * 0.28} ${oy + s * 0.05}
+                   C ${ox + s * 0.45} ${oy - s * 0.03}, ${ox + s * 0.5} ${oy + s * 0.15}, ${ox + s * 0.5} ${oy + s * 0.24}
+                   C ${ox + s * 0.5} ${oy + s * 0.15}, ${ox + s * 0.55} ${oy - s * 0.03}, ${ox + s * 0.72} ${oy + s * 0.05}
+                   C ${ox + s * 1.05} ${oy + s * 0.18}, ${ox + s * 0.95} ${oy + s * 0.58}, ${ox + s * 0.5} ${oy + s * 0.88} Z`;
+
+        path.setAttribute("d", d);
+        path.setAttribute("fill", fill);
+        circle.parentNode.replaceChild(path, circle);
+      });
+    }
+
+    function refreshQRCode() {
+      const isHeart = selectDotStyle.value === "heart";
+
+      qrCode.update({
+        data: inputData.value || " ",
+        qrOptions: { errorCorrectionLevel: "H" },
+        dotsOptions: {
+          color: inputDotColor.value,
+          // Kalp seçiliyse kütüphaneye 'dots' çizdirilir, ardından hassas kalp enjeksiyonu yapılır
+          type: isHeart ? "dots" : selectDotStyle.value
+        },
+        cornersSquareOptions: { type: selectCornerStyle.value },
+        backgroundOptions: { color: inputBgColor.value }
+      });
+
+      setTimeout(() => {
+        makeSvgResponsive();
+        if (isHeart) applyScannableHeartEffect();
+      }, 40);
+    }
+
+    function updateStyleDropdowns(conceptKey) {
+      const config = conceptStyles[conceptKey] || conceptStyles.all;
+      const prevDotVal = selectDotStyle.value;
+      const prevCornerVal = selectCornerStyle.value;
+
+      selectDotStyle.innerHTML = "";
+      config.dots.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item.value;
+        opt.textContent = item.label;
+        selectDotStyle.appendChild(opt);
+      });
+
+      selectCornerStyle.innerHTML = "";
+      config.corners.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item.value;
+        opt.textContent = item.label;
+        selectCornerStyle.appendChild(opt);
+      });
+
+      selectDotStyle.value = config.dots.some(d => d.value === prevDotVal) ? prevDotVal : config.dots[0].value;
+      selectCornerStyle.value = config.corners.some(c => c.value === prevCornerVal) ? prevCornerVal : config.corners[0].value;
+
+      refreshQRCode();
+    }
+
+    updateStyleDropdowns("all");
+
+    // Dinleyiciler
+    selectTheme.addEventListener("change", (e) => updateStyleDropdowns(e.target.value));
+    selectDotStyle.addEventListener("change", refreshQRCode);
+    selectCornerStyle.addEventListener("change", refreshQRCode);
+    inputData.addEventListener("input", refreshQRCode);
+
     inputDotColor.addEventListener("input", (e) => {
       document.getElementById("dot-color-label").innerText = e.target.value.toUpperCase();
-      qrCode.update({ dotsOptions: { color: e.target.value } });
+      refreshQRCode();
     });
 
     inputBgColor.addEventListener("input", (e) => {
       document.getElementById("bg-color-label").innerText = e.target.value.toUpperCase();
-      qrCode.update({ backgroundOptions: { color: e.target.value } });
+      document.getElementById("qr-box").style.backgroundColor = e.target.value;
+      refreshQRCode();
     });
 
-    selectDotStyle.addEventListener("change", (e) => qrCode.update({ dotsOptions: { type: e.target.value } }));
-    selectCornerStyle.addEventListener("change", (e) => qrCode.update({ cornersSquareOptions: { type: e.target.value } }));
+    inputCaption.addEventListener("input", (e) => captionDisplay.innerText = e.target.value);
+    selectCaptionSize.addEventListener("change", (e) => captionDisplay.style.fontSize = e.target.value);
+    inputCaptionColor.addEventListener("input", (e) => {
+      document.getElementById("caption-color-label").innerText = e.target.value.toUpperCase();
+      captionDisplay.style.color = e.target.value;
+    });
 
-    // --- YENİ: Gelişmiş Logo Yönetim Mantığı ---
-
-    // 1. Dosya Seçme ve Önizleme
+    // Logo Yönetimi
     const handleLogoChange = (file) => {
-      if (!file) return;
-
-      // Dosya tipi kontrolü
-      if (!file.type.startsWith('image/')) {
-        alert("Lütfen geçerli bir resim dosyası (PNG, JPG, SVG) seçin.");
-        return;
-      }
-
+      if (!file || !file.type.startsWith('image/')) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        const base64Image = e.target.result;
-        
-        // QR Kodunu logoyla güncelle
-        qrCode.update({ image: base64Image });
-
-        // Arayüzü güncelle: Yükleme alanını gizle, önizleme barını göster
-        logoPreviewImg.src = base64Image;
+        qrCode.update({ image: e.target.result });
+        logoPreviewImg.src = e.target.result;
         logoNameSpan.innerText = file.name;
         logoDropZone.style.display = "none";
         logoPreviewBar.classList.add("active");
+        setTimeout(refreshQRCode, 50);
       };
       reader.readAsDataURL(file);
     };
 
-    // Input değiştiğinde
     logoInput.addEventListener("change", (e) => handleLogoChange(e.target.files[0]));
-
-    // 2. Sürükle-Bırak Efektleri
-    logoDropZone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      logoDropZone.classList.add("drag-over");
-    });
-
-    logoDropZone.addEventListener("dragleave", () => {
-      logoDropZone.classList.remove("drag-over");
-    });
-
+    logoDropZone.addEventListener("dragover", (e) => { e.preventDefault(); logoDropZone.classList.add("drag-over"); });
+    logoDropZone.addEventListener("dragleave", () => logoDropZone.classList.remove("drag-over"));
     logoDropZone.addEventListener("drop", (e) => {
       e.preventDefault();
       logoDropZone.classList.remove("drag-over");
       handleLogoChange(e.dataTransfer.files[0]);
     });
 
-    // 3. LOGO KALDIRMA
     btnRemoveLogo.addEventListener("click", () => {
-      // QR Kodundan logoyu sil
       qrCode.update({ image: "" });
-
-      // Inputu sıfırla (aynı dosya tekrar seçilebilsin diye)
       logoInput.value = "";
-      
-      // Arayüzü eski haline getir
       logoDropZone.style.display = "block";
       logoPreviewBar.classList.remove("active");
       logoPreviewImg.src = "";
+      setTimeout(refreshQRCode, 50);
     });
 
-    // İndirme Fonksiyonu
-    function downloadQR(format) {
-      const fileName = "zero-qr-studio-" + new Date().getTime();
-      qrCode.download({ name: fileName, extension: format });
+    // Dışa Aktarma (PNG & SVG)
+    async function downloadQRWithText(format) {
+      const text = inputCaption.value.trim();
+      const fileName = "zeroqr-" + Date.now();
+      const svgOriginal = qrContainer.querySelector("svg");
+      if (!svgOriginal) return;
+
+      const clonedSvg = svgOriginal.cloneNode(true);
+      const baseSize = 320;
+      const textMargin = text ? 48 : 0;
+      const totalHeight = baseSize + textMargin;
+
+      clonedSvg.setAttribute("width", baseSize);
+      clonedSvg.setAttribute("height", totalHeight);
+      clonedSvg.setAttribute("viewBox", `0 0 ${baseSize} ${totalHeight}`);
+
+      if (text) {
+        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textEl.setAttribute("x", baseSize / 2);
+        textEl.setAttribute("y", baseSize + 30);
+        textEl.setAttribute("text-anchor", "middle");
+        textEl.setAttribute("fill", inputCaptionColor.value);
+        textEl.setAttribute("font-family", "'Plus Jakarta Sans', sans-serif");
+        textEl.setAttribute("font-size", selectCaptionSize.value);
+        textEl.setAttribute("font-weight", "700");
+        textEl.textContent = text;
+        clonedSvg.appendChild(textEl);
+      }
+
+      const svgData = new XMLSerializer().serializeToString(clonedSvg);
+
+      if (format === 'svg') {
+        const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `${fileName}.svg`;
+        link.click();
+        return;
+      }
+
+      // Yüksek DPI PNG İndirme
+      const canvas = document.createElement("canvas");
+      const scale = 3;
+      canvas.width = baseSize * scale;
+      canvas.height = totalHeight * scale;
+
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = () => {
+        ctx.fillStyle = inputBgColor.value;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+
+        const a = document.createElement("a");
+        a.download = `${fileName}.png`;
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      };
+      img.src = url;
     }
   </script>
 </body>
